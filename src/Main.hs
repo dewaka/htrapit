@@ -43,5 +43,36 @@ bogusNews = [ HackerNewsItem { title = "abc"
 printNews :: [HackerNewsItem] -> IO ()
 printNews = mapM_ (putStrLn . show) . zip [1..] . map title
 
+processCmdInput news = do
+  putStr "> "
+  cmd <- getLine
+  case cmd of
+    "d" -> displayNews
+    "display" -> displayNews
+    "e" -> exit
+    "exit" -> exit
+    ('r':' ':num) -> displayItem num
+    ('r':'e':'a':'d':' ':num) -> displayItem num
+    _ -> unknown cmd
+  where
+    displayNews = do { putStrLn "Displaying";
+                       printNews news;
+                       processCmdInput news
+                     }
+
+    exit = putStrLn "Bye..."
+
+    unknown cmd = do { putStrLn $ "Error: unknown command " ++ cmd;
+                       processCmdInput news
+                     }
+
+    displayItem snum = do { putStrLn $ "Displaying news item: " ++ snum;
+                            let n = (read snum) :: Int
+                                newsUrl = link $ news !! n
+                            in openUrlInBrowser newsUrl;
+                            processCmdInput news
+                         }
+
+
 main = do
   putStrLn "Starting HTrapIt"
