@@ -1,6 +1,7 @@
 -- Starting point
 
 import System.Cmd
+import Scraper.Scraper
 
 hnRss = "https://news.ycombinator.com/rss"
 
@@ -27,6 +28,8 @@ data HackerNewsItem = HackerNewsItem { title :: String
                                      , description :: String
                                      } deriving (Show, Eq)
 
+-- TODO: Enhance this function to be cross platform compatible
+-- Refer: http://stackoverflow.com/questions/1795111/is-there-a-cross-platform-way-to-open-a-file-browser-in-python
 openUrlInBrowser cmd = system openCmd
   where openCmd = "open " ++ cmd
 
@@ -72,7 +75,6 @@ processCmdInput news = do
                             in openUrlInBrowser newsUrl;
                             processCmdInput news
                          }
-
 
 main = do
   putStrLn "Starting HTrapIt"

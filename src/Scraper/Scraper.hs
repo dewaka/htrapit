@@ -1,4 +1,4 @@
-module Scraper where
+module Scraper.Scraper where
 
 import Network.Curl (curlGetString)
 import Network.Curl.Code
