@@ -59,23 +59,23 @@ processCmdInput news = do
     ('r':'e':'a':'d':' ':num) -> displayItem num
     _ -> unknown cmd
   where
-    displayNews = do { putStrLn "Displaying";
-                       printNews news;
-                       processCmdInput news
-                     }
+    displayNews = do
+      putStrLn "Displaying"
+      printNews news
+      processCmdInput news
 
     exit = putStrLn "Bye..."
 
-    unknown cmd = do { putStrLn $ "Error: unknown command " ++ cmd;
-                       processCmdInput news
-                     }
+    unknown cmd = do
+      putStrLn $ "Error: unknown command " ++ cmd
+      processCmdInput news
 
-    displayItem snum = do { putStrLn $ "Displaying news item: " ++ snum;
-                            let n = (read snum) :: Int
-                                newsUrl = link $ news !! n
-                            in openUrlInBrowser newsUrl;
-                            processCmdInput news
-                         }
+    displayItem snum = do
+      putStrLn $ "Displaying news item: " ++ snum
+      let n = (read snum) :: Int
+          newsUrl = link $ news !! n
+      openUrlInBrowser newsUrl
+      processCmdInput news
 
 printTags page = print $ parseTags page
 
@@ -83,11 +83,9 @@ printOnlineNews = do
   res <- processPage hnRss 
   case res of
     Left code -> putStrLn $ "Failed to process with code " ++ (show res)
-    Right (page, _) -> do {
-      putStrLn "Here's the page";
+    Right (page, _) -> do 
+      putStrLn "Here's the page"
       printTags page
-      -- putStrLn page
-      }
 
 main = do
   putStrLn "Starting HTrapIt"
