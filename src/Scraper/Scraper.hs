@@ -6,9 +6,9 @@ import Network.Curl.Code
 type PageProcessor = (String -> Bool)
 type ErrorProcessor = (CurlCode -> Bool)
 
-processPage :: String -> PageProcessor -> ErrorProcessor -> IO Bool
-processPage url onSuccess onFail = do
+processPage :: String -> IO (Either CurlCode (String, CurlCode))
+processPage url = do
   (status, page) <- curlGetString url []
   case status of
-    CurlOK -> return $ onSuccess page
-    _ -> return $ onFail status
+    CurlOK -> return $ Right (page, status)
+    _ -> return $ Left status

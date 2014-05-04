@@ -1,6 +1,7 @@
 -- Starting point
 
 import System.Cmd
+import Text.HTML.TagSoup
 import Scraper.Scraper
 
 hnRss = "https://news.ycombinator.com/rss"
@@ -22,10 +23,10 @@ hnRss = "https://news.ycombinator.com/rss"
 --     </channel>
 -- </rss>
 
-data HackerNewsItem = HackerNewsItem { title :: String
-                                     , link :: String
-                                     , comments :: String
-                                     , description :: String
+data HackerNewsItem = HackerNewsItem { title :: !String
+                                     , link :: !String
+                                     , comments :: !String
+                                     , description :: !String
                                      } deriving (Show, Eq)
 
 -- TODO: Enhance this function to be cross platform compatible
@@ -75,6 +76,18 @@ processCmdInput news = do
                             in openUrlInBrowser newsUrl;
                             processCmdInput news
                          }
+
+printTags page = print $ parseTags page
+
+printOnlineNews = do
+  res <- processPage hnRss 
+  case res of
+    Left code -> putStrLn $ "Failed to process with code " ++ (show res)
+    Right (page, _) -> do {
+      putStrLn "Here's the page";
+      printTags page
+      -- putStrLn page
+      }
 
 main = do
   putStrLn "Starting HTrapIt"
